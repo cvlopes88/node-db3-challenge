@@ -6,7 +6,8 @@ find,
 findById,
 findSteps,
 add,
-remove
+remove,
+update
 }; 
 
 function find() {
@@ -19,17 +20,29 @@ function findById(id) {
 };
 
 
-function findSteps() {
-    return db.select('*').from('schemes');
+function findSteps(id) {
+    return db
+   
+    .select('steps.*')
+    .from('steps')
+    .join('schemes', 'schemes.id', '=', 'steps.scheme_id')
+    .where('schemes.id', id)
+    
 };
 
 
-async function add() {
-    const [id] =await db('schemes').insert(schemes)
-    return findById(id);
+ function add(scheme) {
+   return db('schemes', 'id').insert(scheme)
+     
 };
 
 
 function remove(id) {
     return db('schemes').where({id}).del();
+};
+
+function update(changes, id) {
+    return db('schemes')
+    .where('id', id)
+    .update(changes, '*');
 };
